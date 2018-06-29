@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test records | {{job.name}}</title>
+</head>
+<body>
+	<h1>{{job.name}}</h1>
+	<a href="{% url 'job_form' %}">&lt; Jobs</a><br>
+	<form method="POST" action="{% url 'test_form' job.id %}">
+		{% csrf_token %}
+		{{ formset.management_form }}
+		{% for form in formset %}
+			<table style="float:left;border:1px solid #333; padding:1em;margin:0.5em;">
+				{% for hidden in form.hidden_fields %}
+					{{hidden}}
+				{% endfor %}
+				{% for visible in form.visible_fields %}
+					<tr>
+						<td>
+							{{visible.label}}
+						</td>
+						<td>
+							{{visible}}
+						</td>	
+					</tr>
+				{% endfor %}
+			</table>
+		{% endfor %}
+		<input type="submit" name="Save">
+	</form>
+
+</body>
+</html>

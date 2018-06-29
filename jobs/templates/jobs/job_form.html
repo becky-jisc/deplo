@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Deplo | getting shit done</title>
+	<style type="text/css">
+		body{
+			background: #303136;
+			font-family: Georgia;
+		}
+		table{
+			float:left;
+			margin:0.5em;
+			padding:1em;
+			background: #EEE;
+			border:1px solid #333;
+		}
+
+	</style>
+</head>
+<body>
+
+	<form method="POST" action="{% url 'job_form' %}">
+		{% csrf_token %}
+		{{ form.management_form }}
+		<input type="submit" name="Save">
+			
+		{% for f in form %}
+			<table style="">
+				{% for hidden in f.hidden_fields %}
+					{{hidden}}
+				{% endfor %}
+				{% for visible in f.visible_fields %}
+					<tr>
+						<td>
+							{{visible.label}}
+						</td>
+						<td>
+							{{visible}}
+						</td>	
+					</tr>
+				{% endfor %}
+				<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+				{% if f.instance.id %}
+					<tr><td><a href="{% url 'test_form' f.instance.id %}">Test results</a></td><td>({{f.instance.testrecord_set.all.count}})</td>
+				{% else %}	
+					<tr><td>&nbsp;</a></td><td>&nbsp;</td>
+				{% endif %}
+				</tr>
+			</table>
+		{% endfor %}
+	</form>
+
+</body>
+</html>
