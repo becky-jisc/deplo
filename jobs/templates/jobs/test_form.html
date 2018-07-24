@@ -2,6 +2,12 @@
 <html>
 <head>
 	<title>Test records | {{job.name}}</title>
+	<style type="text/css">
+		body{
+			background: gray;
+			font: Georgia;
+		}
+	</style>
 </head>
 <body>
 	<h1>{{job.name}}</h1>
@@ -10,7 +16,7 @@
 		{% csrf_token %}
 		{{ formset.management_form }}
 		{% for form in formset %}
-			<table style="float:left;border:1px solid #333; padding:1em;margin:0.5em;">
+			<table style="float:left;border:1px solid #333; padding:1em;margin:0.5em;background:#eee;">
 				{% for hidden in form.hidden_fields %}
 					{{hidden}}
 				{% endfor %}
@@ -24,10 +30,13 @@
 						</td>	
 					</tr>
 				{% endfor %}
+				<tr>
+					<td>Command</td>
+					<td><input type="text" name="" value="{{form.instance.command}}"></td>
+				</tr>
 			</table>
 		{% endfor %}
 		<input type="submit" name="Save">
 	</form>
-
 </body>
 </html>

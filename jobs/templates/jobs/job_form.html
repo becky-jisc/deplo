@@ -25,6 +25,8 @@
 		<input type="submit" name="Save">
 			
 		{% for f in form %}
+		{% if not form.instance.done %}
+			
 			<table style="">
 				{% for hidden in f.hidden_fields %}
 					{{hidden}}
@@ -47,6 +49,8 @@
 				{% endif %}
 				</tr>
 			</table>
+			
+		{% endif %}
 		{% endfor %}
 	</form>
 

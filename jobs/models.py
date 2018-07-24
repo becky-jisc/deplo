@@ -27,9 +27,22 @@ class TestRecord(models.Model):
 		]
 	
 	job = models.ForeignKey('Job')
-	where = models.SmallIntegerField(choices=TEST_LOCATIONS)
-	test_path = models.CharField(max_length=355)
+	where = models.SmallIntegerField(choices=TEST_LOCATIONS, default=3)
+	test_path = models.CharField(null=True, blank=True, max_length=355)
 	notes = models.TextField(null=True, blank=True)
+
+	@property
+	def command(self):
+		if not self.test_path:
+			return ''
+		command_path_split = self.test_path.split('.')
+		command_path_1 = ".".join(command_path_split[:-2])
+		command_path_2 = ".".join(command_path_split[-2:])
+		if command_path_1 and command_path_2:
+			return "bin/django-admin.py test {}:{} -sx --settings=bos2.test_pg" \
+							.format(command_path_1, command_path_2)
+		return ''
+	
 
 
 class Repo(models.Model):

@@ -32,11 +32,19 @@ def test_form(request, job_id):
         }
 
     if request.method == "POST":
+        print 'Here', request.POST
         formset = TestRecordFormSet(request.POST, instance=job, queryset=TestRecord.objects.filter(job_id=job_id))
-        if (formset.is_valid()):
-            for form in formset:
+        for form in formset:
+            print 'is valid?', form.is_valid()
+            print 'where', form.cleaned_data.get('where', False)
+            if form in formset.deleted_forms:
+                to_delete = form.instance
+                TestRecord.objects.get(id=to_delete.id).delete()
+                print 'Deleted'
+            elif form.is_valid() and form.cleaned_data.get('where', False):
                 test_record = form.save(commit=False)
                 test_record.job = job
                 test_record.save()
+                print 'Saved'
         context['form'] = formset
     return render(request, 'jobs/test_form.html', context)
